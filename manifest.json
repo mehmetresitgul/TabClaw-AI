@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "TabClaw AI: Tab Organizer & Focus Engine",
+  "short_name": "TabClaw AI",
+  "version": "3.0.0",
+  "description": "Clear browser chaos & regain control. Your AI tab organizer and focus engine to manage bookmarks, track tasks, and stay productive.",
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "storage",
+    "alarms",
+    "sidePanel",
+    "contextMenus",
+    "notifications",
+    "idle",
+    "scripting",
+    "declarativeNetRequest",
+    "bookmarks"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "tabclaw-icon.png",
+      "32": "tabclaw-icon.png",
+      "48": "tabclaw-icon.png",
+      "128": "tabclaw-icon.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "icons": {
+    "16": "tabclaw-icon.png",
+    "32": "tabclaw-icon.png",
+    "48": "tabclaw-icon.png",
+    "128": "tabclaw-icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

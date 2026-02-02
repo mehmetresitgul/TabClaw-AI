@@ -1,0 +1,6 @@
+api.txt  
+*.env  
+.claude/  
+node_modules/  
+.DS_Store 
+CLAUDE.md 
