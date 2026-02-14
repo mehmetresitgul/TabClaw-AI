@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Focus Mode</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary:      #05E5F7;
+      --primary-dim:  #0499a8;
+      --primary-glow: rgba(5,229,247,0.18);
+      --primary-soft: rgba(5,229,247,0.07);
+      --secondary:    #CC3D00;
+      --secondary-soft:  rgba(204,61,0,0.10);
+      --secondary-border:rgba(204,61,0,0.32);
+      --secondary-text:  #ff7a45;
+      --bg:        #09090b;
+      --surface:   #0f1012;
+      --surface2:  #161819;
+      --border:    rgba(5,229,247,0.12);
+      --text:      #e2eef0;
+      --text-dim:  #5a7278;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% -10%, rgba(5,229,247,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 110%, rgba(204,61,0,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      width: min(560px, calc(100vw - 48px));
+      padding: 52px 48px 44px;          /* golden ratio: ~1.18 top/bottom vs side */
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow:
+        0 0 0 1px rgba(5,229,247,0.05),
+        0 32px 80px rgba(0,0,0,0.7),
+        0 0 60px rgba(5,229,247,0.03) inset;
+      text-align: center;
+      animation: fadeUp 0.45s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+
+    /* Top gold line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 60%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* ── Shield icon ── */
+    .shield-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px; height: 72px;
+      margin: 0 auto 32px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      border: 1px solid rgba(5,229,247,0.20);
+      box-shadow: 0 0 28px var(--primary-glow);
+    }
+
+    .shield-wrap svg {
+      width: 34px; height: 34px;
+      fill: var(--primary);
+      filter: drop-shadow(0 0 8px rgba(5,229,247,0.5));
+    }
+
+    /* ── Blocked site chip ── */
+    .site-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      background: var(--secondary-soft);
+      border: 1px solid var(--secondary-border);
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: var(--secondary-text);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 0.04em;
+      margin-bottom: 28px;
+    }
+
+    .site-chip::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--secondary-text);
+      box-shadow: 0 0 6px currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Message ── */
+    .message {
+      font-size: 21px;
+      line-height: 1.55;
+      color: var(--text);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    .message strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 36px;
+    }
+
+    /* ── Timer ── */
+    .timer-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+      padding: 14px 24px;
+      background: var(--surface2);
+      border: 1px solid rgba(5,229,247,0.10);
+      border-radius: 14px;
+    }
+
+    .timer-icon {
+      font-size: 16px;
+      opacity: 0.7;
+    }
+
+    .timer-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 500;
+    }
+
+    .timer-value {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      text-shadow: 0 0 20px rgba(5,229,247,0.35);
+    }
+
+    .timer-phase {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .timer-phase.work  { background: rgba(5,229,247,0.10);  color: var(--primary); }
+    .timer-phase.break { background: rgba(204,61,0,0.12);   color: #ff7a45; }
+
+    .timer-block.hidden { display: none; }
+
+    /* ── Divider ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(5,229,247,0.08), transparent);
+      margin-bottom: 28px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 15px 24px;
+      background: linear-gradient(135deg, #05E5F7 0%, #03a8b8 100%);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #040e10;
+      cursor: default;
+      letter-spacing: -0.01em;
+      box-shadow:
+        0 4px 20px rgba(5,229,247,0.28),
+        0 1px 0 rgba(255,255,255,0.12) inset;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(5,229,247,0.38), 0 1px 0 rgba(255,255,255,0.12) inset;
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+
+    .btn-ghost {
+      display: block;
+      width: 100%;
+      padding: 13px 24px;
+      background: transparent;
+      border: 1px solid rgba(204,61,0,0.25);
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-dim);
+      cursor: default;
+      letter-spacing: -0.01em;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(204,61,0,0.50);
+      color: #ff7a45;
+      background: var(--secondary-soft);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 28px;
+      font-size: 11.5px;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="shield-wrap">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1zm-1 13l-3-3 1.41-1.41L11 11.17l4.59-4.58L17 8l-6 6z"/>
+      </svg>
+    </div>
+
+    <div class="site-chip" id="site">loading...</div>
+
+    <p class="message" id="msg">Loading...</p>
+    <p class="sub" id="sub"></p>
+
+    <div class="timer-block hidden" id="timerBlock">
+      <span class="timer-icon">⏱</span>
+      <span class="timer-label">Time remaining</span>
+      <span class="timer-value" id="timerValue">--:--</span>
+      <span class="timer-phase" id="timerPhase"></span>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="btn-primary" id="btnBack">
+      ↩ Back to building
+    </button>
+    <button class="btn-ghost" id="btnNeed">
+      I actually need this for my task
+    </button>
+
+    <div class="footer">TabClaw AI · Focus Mode</div>
+  </div>
+
+  <script src="focus-block.js"></script>
+</body>
+</html>

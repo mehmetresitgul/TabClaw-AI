@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Focus Mode — Blocked</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:        #0A0A0A;
+  --surface:   #141414;
+  --border:    rgba(255,255,255,0.08);
+  --red:       #FF4757;
+  --red-dim:   rgba(255,71,87,0.06);
+  --red-glow:  rgba(255,71,87,0.2);
+  --text:      #f0f0f8;
+  --sub:       rgba(255,255,255,0.35);
+  --muted:     rgba(255,255,255,0.18);
+  --font:      'Geist', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+body {
+  width: 100vw; height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(255,71,87,0.04) 0%, transparent 60%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  padding: 40px;
+  max-width: 520px;
+}
+
+/* Shield icon */
+.shield-icon {
+  width: 72px; height: 72px;
+  margin-bottom: 28px;
+  opacity: 0.9;
+}
+
+/* Badge */
+.block-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 14px;
+  border: 1px solid rgba(255,71,87,0.25);
+  border-radius: 99px;
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  color: var(--red); text-transform: uppercase;
+  background: var(--red-dim);
+  margin-bottom: 24px;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.6); }
+}
+
+/* Heading */
+.heading {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+/* Domain */
+.blocked-domain {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--red);
+  background: var(--red-dim);
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,71,87,0.15);
+  margin-bottom: 24px;
+  letter-spacing: 0.3px;
+}
+
+/* Counter */
+.counter {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 28px;
+}
+.counter strong {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Quote */
+.quote-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  max-width: 400px;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+.quote-author {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.3px;
+  margin-bottom: 36px;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-focus {
+  padding: 12px 28px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 16px var(--red-glow);
+}
+.btn-focus:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px rgba(255,71,87,0.35);
+}
+
+.btn-bypass {
+  padding: 12px 20px;
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-bypass:hover {
+  color: var(--sub);
+  border-color: rgba(255,255,255,0.15);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb"></div>
+
+<div class="main">
+  <!-- Shield SVG -->
+  <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill="rgba(255,71,87,0.1)" stroke="#FF4757" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M9 12l2 2 4-4" stroke="#FF4757" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+    <path d="M15 9l-6 6M9 9l6 6" stroke="#FF4757" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <div class="block-badge">
+    <div class="badge-dot"></div>
+    Focus Mode Active
+  </div>
+
+  <h1 class="heading">This site is blocked in focus mode</h1>
+
+  <div class="blocked-domain" id="blockedDomain"></div>
+
+  <div class="counter" id="counter"></div>
+
+  <p class="quote-text" id="quoteText"></p>
+  <p class="quote-author" id="quoteAuthor"></p>
+
+  <div class="actions">
+    <button class="btn-focus" id="focusBtn">Back to Focus</button>
+    <button class="btn-bypass" id="bypassBtn">Just 5 Minutes</button>
+  </div>
+</div>
+
+<script src="distraction-warning.js"></script>
+</body>
+</html>
